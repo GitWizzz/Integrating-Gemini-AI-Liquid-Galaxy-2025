@@ -31,11 +31,12 @@ const GeminiChat = () => {
           </div>
         ))}
       </div>
-
       <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="w-full p-2 border rounded mt-2" placeholder="Type your question..."/>
+
       <button onClick={handleGenerate} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
         Get Response
       </button>
+      
     </div>
   );
 };
