@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold">Gemini AI Chat</h1>
-      {/* <GeminiChat /> */}
+      <GeminiChat />
       <GeminiImageAnalyzer/>
     </div>
   );
