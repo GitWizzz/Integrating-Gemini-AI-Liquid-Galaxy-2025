@@ -7,6 +7,7 @@ const GeminiChat=()=>{
   const [input,setInput]=useState("");
   const [typing,setTyping]=useState(false);
   const [showSettings,setShowSettings]=useState(false);
+  const [showSidebar,setShowSidebar]=useState(false);
   const [apiKey,setApiKey]=useState(localStorage.getItem("GEMINI_API_KEY")||"");
 
   const activeChat=chats.find(c=>c.id===activeId);
@@ -43,16 +44,19 @@ const GeminiChat=()=>{
     setTyping(false);
   };
 
-  const newChat=()=>{const chat={id:Date.now(),title:"New Chat",messages:[]};setChats(p=>[chat,...p]);setActiveId(chat.id);};
+  const newChat=()=>{const chat={id:Date.now(),title:"New Chat",messages:[]};setChats(p=>[chat,...p]);setActiveId(chat.id);setShowSidebar(false);};
   const saveApiKey=()=>{apiKey.trim()?localStorage.setItem("GEMINI_API_KEY",apiKey.trim()):localStorage.removeItem("GEMINI_API_KEY");setShowSettings(false);};
 
   return(
     <div className="flex h-screen bg-white overflow-hidden">
 
+      {/* MOBILE OVERLAY */}
+      {showSidebar&&<div onClick={()=>setShowSidebar(false)} className="fixed inset-0 bg-black/40 z-40 md:hidden"/>}
+
       {/* SIDEBAR */}
-      <aside className="w-72 border-r bg-gray-50 flex flex-col p-4">
+      <aside className={`fixed md:static z-50 md:z-auto w-72 h-full border-r bg-gray-50 flex flex-col p-4 transition-transform duration-300 ${showSidebar?"translate-x-0":"-translate-x-full md:translate-x-0"}`}>
         <div className="mb-4">
-          <h1 className="text-lg font-semibold text-[#4D2E64]">Gemini Desk</h1>
+          <h1 className="text-lg font-semibold text-[#4D2E64]">BiMind AI</h1>
           <p className="text-xs text-gray-500">AI Workspace</p>
         </div>
 
@@ -64,7 +68,11 @@ const GeminiChat=()=>{
 
         <div className="flex-1 space-y-1 overflow-y-auto">
           {chats.map(c=>(
-            <div key={c.id} onClick={()=>setActiveId(c.id)} className={`px-3 py-2 rounded-lg cursor-pointer text-sm transition ${c.id===activeId?"bg-purple-100 text-purple-700":"hover:bg-gray-100"}`}>
+            <div
+              key={c.id}
+              onClick={()=>{setActiveId(c.id);setShowSidebar(false);}}
+              className={`px-3 py-2 rounded-lg cursor-pointer text-sm transition ${c.id===activeId?"bg-purple-100 text-purple-700":"hover:bg-gray-100"}`}
+            >
               {c.title}
             </div>
           ))}
@@ -79,6 +87,7 @@ const GeminiChat=()=>{
         {/* NAVBAR */}
         <header className="flex items-center justify-between px-6 py-3 border-b">
           <div className="flex items-center gap-3">
+            <button onClick={()=>setShowSidebar(true)} className="md:hidden text-xl">☰</button>
             <span className="font-semibold text-[#4D2E64]">Effortless Support</span>
             <span className="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700">Online</span>
           </div>
@@ -122,7 +131,7 @@ const GeminiChat=()=>{
         )}
 
         {/* INPUT */}
-        <div className="border-t p-8">
+        <div className="border-t p-4 md:p-8">
           <div className="flex gap-2">
             <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Type message" className="flex-1 px-4 py-2 border rounded-xl"/>
             <button onClick={send} className="px-4 py-2 rounded-xl bg-purple-600 text-white text-sm">Send</button>
