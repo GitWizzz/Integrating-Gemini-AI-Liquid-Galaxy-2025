@@ -1,13 +1,16 @@
+import { Routes, Route} from "react-router-dom";
+import Home from "./components/Home";
 import GeminiChat from "./components/GeminiChat";
 import GeminiImageAnalyzer from "./components/GeminiImage";
 
 function App() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold">Gemini AI Chat</h1>
-      <GeminiChat />
-      <GeminiImageAnalyzer/>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/chat" element={<GeminiChat />} />
+      <Route path="/image" element={<GeminiImageAnalyzer />} />
+    </Routes>
   );
 }
+
 export default App;
